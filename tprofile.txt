@@ -1,0 +1,36 @@
+2.4 apache-tomcat-7.0.35\bin下面，添加一个文件setenv.bat，内容如下
+set JAVA_OPTS="-javaagent:tprofiler.jar"
+
+
+2.5 将retwisj工程clone下来，然后将编译出的retwisj.war放到tomcat的webapp目录下，关于retwisj，可以参考我的另一篇日志[url]http://xpenxpen.iteye.com/blog/2082966[/url]
+
+2.6 启动tomcat
+
+2.7 打开浏览器，http://localhost:8080/retwisj,随便点点
+
+2.8 打开tprofiler客户端，强制刷新查看方法的执行时间
+apache-tomcat-7.0.35\bin>java -cp tprofiler.jar com.taobao.profile.client.TProfilerClient 127.0.0.1 50000 flushmethod
+
+2.9 这样就可以看到这个文件了apache-tomcat-7.0.35\bin\logs\tmethod.log
+内容大致如下
+
+instrumentclass:1125 instrumentmethod:8228
+0 org/springframework/web/SpringServletContainerInitializer:<init>:111
+1 org/springframework/web/SpringServletContainerInitializer:onStartup:176
+
+
+2.10 分析profile日志
+apache-tomcat-7.0.35\bin>java -cp tprofiler.jar com.taobao.profile.analysis.ProfilerLogAnalysis logs/tprofiler.log logs/tmethod.log logs/topmethod.log logs/topobject.log
+这个命令试下来没用，不知是bug还是什么。我这里不深究了，有tmethod.log也够了。
+
+至此，就可以根据profile日志分析程序的性能瓶颈了。
+
+3.tprofiler原理探究
+核心就2个东东：instrument和asm
+instrument提供在运行时替换类的字节码的机制，而具体如何编写java字节码则可以用asm或者bcel之类的工具
+对于tprofile的源码，稍微看看就行，idea是可以学习借鉴的，但是代码质量，我只能说呵呵吧，大家不要太在意。
+--------------------- 
+作者：iteye_878 
+来源：CSDN 
+原文：https://blog.csdn.net/iteye_878/article/details/82615928 
+版权声明：本文为博主原创文章，转载请附上博文链接！
