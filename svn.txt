@@ -1,0 +1,10 @@
+svn export svn://10.19.0.22/cognos
+svn add *
+svn add Cognos统计周报20190402.xlsx 
+svn add 07Pm/2019Q1/Cognos统计周报20190402.xlsx 
+svn commit -m "新增19年第一季度工作任务与考勤“
+
+svn co svn://10.19.0.22/cognos
+#svn add 时确认文件目录先增加
+svn add Cognos统计周报20190402.xlsx 
+svn commit -m"新增19年第一季度工作任务与考勤"
