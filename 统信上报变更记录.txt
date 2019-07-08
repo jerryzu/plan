@@ -1,0 +1,54 @@
+web_plredr_healthin	11362	61110121
+web_plredr_healthin	11363	61110122
+web_plredr_healthin	11369	61110128
+web_plredr_healthin	11370	61110129
+web_plredr_healthin	11371	61110130
+web_plredr_healthin	11368	61110127
+web_plredr_healthin	11374	61110133
+web_plredr_healthin	11376	61110135
+web_plredr_healthin	11350	61110058
+web_plredr_healthin	11351	61110059
+web_plredr_healthin	11373	61110132
+web_plredr_healthin	11360	61110066
+web_plredr_healthin	11361	61110067
+web_plredr_healthin	11364	61110068
+
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+select sum(c.coun)
+  from (select count(1) coun
+          from rpt_plyedr a
+         where a.T_INURE_TM >=
+               to_date('V_S', 'YYYYMMDD hh24:mi:ss')
+           and a.T_INURE_TM <=
+               to_date('V_E', 'YYYYMMDD hh24:mi:ss')
+           and a.c_grp_mrk = '0'
+           and a.n_edr_prj_no = 0
+           and a.C_KIND_NO in (select c_cde from web_commcode_sjsb where c_par_cde = 'P07')
+        union ALL
+        select sum(nvl(N_Tgt_Num_Fld_8, 0)) coun
+          from rpt_plyedr a
+         where a.T_INURE_TM >=
+               to_date('20160101 00:00:00', 'YYYYMMDD hh24:mi:ss')
+           and a.T_INURE_TM <=
+               to_date('V_E', 'YYYYMMDD hh24:mi:ss')
+           and a.c_grp_mrk = '1'
+           and a.n_edr_prj_no =
+               f_get_prj_no_edr_healthin(a.c_ply_no,
+                                         to_date('V_E',
+                                                 'YYYYMMDD hh24:mi:ss'))
+           and a.C_KIND_NO in (select c_cde from web_commcode_sjsb where c_par_cde = 'P07')
+        union ALL
+        select -sum(nvl(N_Tgt_Num_Fld_8, 0)) coun
+          from rpt_plyedr a
+         where a.T_INURE_TM >=
+               to_date('20160101 00:00:00', 'YYYYMMDD hh24:mi:ss')  -- 时间写死了
+           and a.T_INURE_TM <=
+               to_date('20161231 23:59:59', 'YYYYMMDD hh24:mi:ss') -- 时间写死了
+           and a.c_grp_mrk = '1'
+           and a.n_edr_prj_no =
+               f_get_prj_no_edr_healthin(a.c_ply_no,
+                                         to_date('20161231 23:59:59',
+                                                 'YYYYMMDD hh24:mi:ss'))
+           and a.C_KIND_NO in (select c_cde from web_commcode_sjsb where c_par_cde = 'P07')
+ ) c
+
