@@ -52,3 +52,32 @@ select sum(c.coun)
            and a.C_KIND_NO in (select c_cde from web_commcode_sjsb where c_par_cde = 'P07')
  ) c
 
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+select sum(c.coun)
+  from (select sum(nvl(N_Tgt_Num_Fld_8, 0)) coun
+          from rpt_plyedr a
+         where a.T_INURE_TM >=
+               to_date('20160101 00:00:00', 'YYYYMMDD hh24:mi:ss')
+           and a.T_INURE_TM <= to_date('V_E', 'YYYYMMDD hh24:mi:ss')
+           and a.c_grp_mrk = '1'
+           and a.n_edr_prj_no =
+               f_get_prj_no_edr_healthin(a.c_ply_no, to_date('V_E', 'YYYYMMDD hh24:mi:ss'))
+           and a.C_prod_NO in
+               (select c_cde from web_commcode_sjsb where c_par_cde = 'P071')
+         
+        union ALL
+        select -sum(nvl(N_Tgt_Num_Fld_8, 0)) coun
+          from rpt_plyedr a
+         where a.T_INURE_TM >=
+               to_date('20160101 00:00:00', 'YYYYMMDD hh24:mi:ss')
+           -- and a.T_INURE_TM <= to_date('20161231 23:59:59', 'YYYYMMDD hh24:mi:ss')
+           and a.T_INURE_TM <= trunc(to_date('V_E', 'YYYYMMDD hh24:mi:ss'),'yyyy') - 1/86400
+           and a.c_grp_mrk = '1'
+           and a.n_edr_prj_no =
+               f_get_prj_no_edr_healthin(a.c_ply_no,
+                                         to_date('20161231 23:59:59',
+                                                 'YYYYMMDD hh24:mi:ss'))
+           and a.C_prod_NO in
+               (select c_cde from web_commcode_sjsb where c_par_cde = 'P071')
+         ) c
