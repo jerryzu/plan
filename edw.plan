@@ -1,0 +1,3 @@
+2019-07-29:
+alter table tpedw.ods_cthx_web_ply_insured add c_strategy_mark varchar(2) default '0' comment '是否战略客户 1-是，0-否';
+alter table tpedw.ods_cthx_web_ply_insured add c_strategy_nam varchar(20) default null comment '集团战略客户简称';
