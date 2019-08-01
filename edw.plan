@@ -5,3 +5,15 @@ alter table tpedw.ods_cthx_web_ply_insured add c_strategy_nam varchar(20) defaul
 2019-08-01:
 ALTER TABLE WEB_PLY_INSURED ADD (C_STRATEGY_MARK VARCHAR2(2)  DEFAULT '0' ); COMMENT ON COLUMN WEB_PLY_INSURED.C_STRATEGY_MARK IS '是否战略客户 1-是，0-否';
 ALTER TABLE WEB_PLY_INSURED ADD (C_STRATEGY_NAM VARCHAR2(30)  DEFAULT NULL ); COMMENT ON COLUMN WEB_PLY_INSURED.C_STRATEGY_NAM IS '集团战略客户简称';
+
+ALTER TABLE WEB_PLY_INSURED  MODIFY (C_STRATEGY_NAM VARCHAR2(40 BYTE) );
+
+sqlplus64 TP_PUB/QAZ2wsx3@10.1.96.27:1521/tpgims
+ALTER TABLE TPS_WEB_PLY_APPLICANT  MODIFY (C_CLNT_ADDR VARCHAR2(600 BYTE) );
+
+
+yum install svn
+svn export svn://10.19.0.22/edw/08src/alidata/edwproject/taskfile/sql/edw_web_clmnv_srvy.sql
+
+cd edw
+svn update
