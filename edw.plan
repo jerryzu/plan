@@ -13,6 +13,9 @@ ALTER TABLE TPS_WEB_PLY_APPLICANT  MODIFY (C_CLNT_ADDR VARCHAR2(600 BYTE) );
 
 
 yum install svn
+
+cd /alidata/edwproject/taskfile/sql
+svn export svn://10.19.0.22/edw/08src/alidata/edwproject/taskfile/sql/rpt_act_intf_voucher_acc_md.sql
 svn export svn://10.19.0.22/edw/08src/alidata/edwproject/taskfile/sql/edw_web_clmnv_srvy.sql
 
 cd edw
